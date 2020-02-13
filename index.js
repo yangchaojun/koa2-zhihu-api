@@ -1,4 +1,5 @@
 const Koa = require('koa')
+const bodyParser = require('koa-bodyparser')
 const app = new Koa()
 const Router = require('koa-router')
 const router = new Router()
@@ -37,6 +38,7 @@ usersRouter.delete('/:id', (ctx) => {
   ctx.status = 204
 })
 
+app.use(bodyParser())
 app.use(router.routes())
 app.use(usersRouter.routes())
 app.use(usersRouter.allowedMethods())
