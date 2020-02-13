@@ -9,32 +9,31 @@ router.get('/', (ctx) => {
   ctx.body = 'This is homepage'
 })
 
+const users = [{
+  name: '李雷'
+}]
+
 usersRouter.get('/', (ctx) => {
-  ctx.body = [
-    {name: '李雷'},
-    {name: '韩梅梅'}
-  ]
+  // ctx.set('Allow', 'GET, POST')
+  ctx.body = users
 })
 
 usersRouter.post('/', (ctx) => {
-  ctx.body = {
-    name: '李雷'
-  }
+  users.push(ctx.request.body)
+  ctx.body = ctx.request.body 
 })
 
 usersRouter.get('/:id', (ctx) => {
-  ctx.body = {
-    name: '李雷'
-  }
+  ctx.body = users[ctx.params.id * 1]
 })
 
 usersRouter.put('/:id', (ctx) => {
-  ctx.body = {
-    name: '李雷2'
-  }
+  users[ctx.params.id * 1] = ctx.request.body
+  ctx.body = ctx.request.body
 })
 
 usersRouter.delete('/:id', (ctx) => {
+  users.splice(ctx.params.id, 1)
   ctx.status = 204
 })
 
