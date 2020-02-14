@@ -5,6 +5,7 @@ const db = [{
 class UsersCtl {
 
   getUsers(ctx) {
+    a.b
     ctx.body = db
   }
 
