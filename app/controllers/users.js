@@ -1,50 +1,44 @@
-const db = [{
-  name: '李雷'
-}]
+const User = require('../models/users')
 
 class UsersCtl {
 
-  getUsers(ctx) {
-    ctx.body = db
+  async getUsers(ctx) {
+    ctx.body = await User.find()
   }
 
-  setUser(ctx) {
+  async setUser(ctx) {
     ctx.verifyParams({
       name: {
         type: 'string',
         required: true
       }
     })
-    db.push(ctx.request.body)
-    ctx.body = ctx.request.body
+    ctx.body = await new User(ctx.request.body).save()
   }
 
-  getSpecificUser(ctx) {
-    if (ctx.params.id * 1 >= db.length) {
-      ctx.throw(412)
+  async getSpecificUser(ctx) {
+    const user = await User.findById(ctx.params.id)
+    if (!user) {
+      ctx.throw(404, '用户不存在')
     }
-    ctx.body = db[ctx.params.id * 1]
+    ctx.body = user
   }
 
-  updateSpecificUser(ctx) {
-    if (ctx.params.id * 1 >= db.length) {
-      ctx.throw(412)
-    }
+  async updateSpecificUser(ctx) {
     ctx.verifyParams({
       name: {
         type: 'string',
         required: true
       }
     })
-    db[ctx.params.id * 1] = ctx.request.body
-    ctx.body = ctx.request.body
+    const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body)
+    if (!user) ctx.throw(404, '用户不存在')
+    ctx.body = user
   }
 
-  deleteSpecificUser(ctx) {
-    if (ctx.params.id * 1 >= db.length) {
-      ctx.throw(412)
-    }
-    db.splice(ctx.params.id, 1)
+  async deleteSpecificUser(ctx) {
+    const user = await User.findByIdAndDelete(ctx.params.id)
+    if(!user) ctx.throw(404, '用户不存在')
     ctx.status = 204
   }
 }
