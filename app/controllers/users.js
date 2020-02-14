@@ -11,8 +11,17 @@ class UsersCtl {
       name: {
         type: 'string',
         required: true
+      },
+      password: {
+        type: 'string',
+        required: true
       }
     })
+    const { name } = ctx.request.body
+    const repeatedUser = User.findOneAndDelete({ name })
+    if (repeatedUser) {
+      ctx.throw(409, '用户名已存在')
+    }
     ctx.body = await new User(ctx.request.body).save()
   }
 
@@ -28,7 +37,11 @@ class UsersCtl {
     ctx.verifyParams({
       name: {
         type: 'string',
-        required: true
+        required: false
+      },
+      password: {
+        type: 'string',
+        required: false
       }
     })
     const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body)

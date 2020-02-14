@@ -8,7 +8,7 @@ router.post('/', UsersCtl.setUser)
 
 router.get('/:id', UsersCtl.getSpecificUser)
 
-router.put('/:id', UsersCtl.updateSpecificUser)
+router.patch('/:id', UsersCtl.updateSpecificUser)
 
 router.delete('/:id', UsersCtl.deleteSpecificUser)
 
