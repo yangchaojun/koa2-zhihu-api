@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken')
+const jsonwebtoken = require('jsonwebtoken')
 const User = require('../models/users')
 const { secret } = require('../config')
 
@@ -81,8 +81,8 @@ class UsersCtl {
     if(!user) {
       ctx.throw(402, '用户名或密码错误')
     }
-    const { name, _id } = ctx.request.body
-    const token = jwt.sign({ name, _id }, secret, { expiresIn: '1d' })
+    const { name, _id } = user
+    const token = jsonwebtoken.sign({ name, _id }, secret, { expiresIn: '1d' })
     ctx.body = { token }
   }
 }
