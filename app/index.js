@@ -39,5 +39,5 @@ app.use(parameter(app))
 routing(app)
 
 app.listen('8080', () => {
-  console.log('程序启动了')
+  console.log('程序运行在8080端口')
 })
