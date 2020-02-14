@@ -1,4 +1,6 @@
+const jwt = require('jsonwebtoken')
 const User = require('../models/users')
+const { secret } = require('../config')
 
 class UsersCtl {
 
@@ -53,6 +55,26 @@ class UsersCtl {
     const user = await User.findByIdAndDelete(ctx.params.id)
     if(!user) ctx.throw(404, '用户不存在')
     ctx.status = 204
+  }
+
+  async login(ctx) {
+    ctx.verifyParams({
+      name: {
+        type: 'string',
+        required: true
+      },
+      password: {
+        type: 'string',
+        required: true
+      }
+    })
+    const user = await User.findOne(ctx.request.body)
+    if(!user) {
+      ctx.throw(402, '用户名或密码错误')
+    }
+    const { name, _id } = ctx.request.body
+    const token = jwt.sign({ name, _id }, secret, { expiresIn: '1d' })
+    ctx.body = { token }
   }
 }
 

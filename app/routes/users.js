@@ -12,4 +12,6 @@ router.patch('/:id', UsersCtl.updateSpecificUser)
 
 router.delete('/:id', UsersCtl.deleteSpecificUser)
 
+router.post('/login', UsersCtl.login)
+
 module.exports = router
