@@ -35,6 +35,13 @@ class UsersCtl {
     ctx.body = user
   }
 
+  async checkOwner(ctx, next) {
+    if (ctx.params.id !== ctx.state.user._id) {
+      ctx.throw(403, '没有权限')
+    }
+    await next()
+  }
+
   async updateSpecificUser(ctx) {
     ctx.verifyParams({
       name: {
@@ -47,6 +54,8 @@ class UsersCtl {
       }
     })
     const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body)
+    console.log(user);
+    
     if (!user) ctx.throw(404, '用户不存在')
     ctx.body = user
   }
